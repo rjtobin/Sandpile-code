@@ -1,0 +1,2 @@
+Bits of code useful for sandpile-type problems.  At the moment, just stuff
+to compute Green's functions for the Z^2 lattice.
