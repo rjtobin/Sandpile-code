@@ -110,7 +110,7 @@ double lattice_green_val(int m, int n, int x1, int x2, int y1, int y2)
   for(int i=1; i<=n; i++)
   {
     double c = M_PI * (double) i / (double) (n+1);
-    double tmp = 8. * sin(c * x2) * sin(c*y2);
+    double tmp = 8. * sin(c * x2) * sin(c*(m-y2+1));
     tmp *= chebyshev_2(x1-1, 2.-cos(c));
     tmp *= chebyshev_2(m-y1, 2.-cos(c));
     tmp *= (i%2) ? 1 : -1;
@@ -133,9 +133,7 @@ void lattice_green(mat& G, int m, int n)
       for(int y1=0; y1<m; y1++)
         for(int y2=0; y2<n; y2++)
         {
-          //this ordering is strange, but seems to be what is required to get
-          //the matrix to look right... TODO justify this
-          int i = m-1-x2 + x1*n;
+          int i = x2 + x1*n;
           int j = y2 + y1*n;
           if(i > j)
             continue;
@@ -154,7 +152,8 @@ void laplace_path(mat& M, int n)
         M(x,y) = 1.;
       else if(x == y-1  ||  x == y+1)
         M(x,y) = -.5;
-      M(x,y) = 0.;
+      else
+        M(x,y) = 0.;
     }
 }
 
@@ -187,54 +186,3 @@ void laplace_path_2d(mat& M, int m, int n)
         }
 }
 
-
-/*int main()
-{
-  init_cheby();
- 
-  int N=20;
-  int M=20;
-  //pngd_image* img = pngd_make_image("green.png", N*M, N*M);
-
-  double** g = new double*[N*M];
-  for(int i=0; i<N*M; i++)
-    g[i] = new double[N*M];
-
-  double max = 0.;
-  for(int i=0; i<N*M; i++)
-  {
-    for(int j=0; j<N*M; j++)
-    {
-      g[i][j] = green(N,N, (i/N)+1,(i%N)+1, (j/M)+1,(j%M)+1 );
-      if(g[i][j] > max)
-        max = g[i][j];
-    }
-    //cout << endl;
-  }
-  
-  char name[100];
-  
-  for(int i=0; i<N*M; i++)
-  {
-    sprintf(name, "green/mat_%d.png", i);
-    pngd_image* img = pngd_make_image(name,N,M);
-    for(int x=0; x<N; x++)
-      for(int y=0; y<M; y++)
-      {
-        int shade = (255. * (g[i][x+y*N] / max));
-        pngd_draw_pixel(img,x,y,shade,shade,shade); 
-      }
-    pngd_finalise(img);
-  }
-  
-  //for(int i=0; i<N*M; i++)
-  //{
-  //  for(int j=0; j<N*M; j++)
-  //  {
-  //    int shade = (255. * (g[i][j] / max));
-  //    pngd_draw_pixel(img,i,j,shade,shade,shade);
-  //  }
-  //}
-  //pngd_finalise(img);
-  return 0;
-}*/

@@ -10,7 +10,7 @@ by lattice_green and two other methods, and checks that they agree.
 using namespace std;
 using namespace arma;
 
-int max_val(double a, double b, double c)
+double max_val(double a, double b, double c)
 {
   a = fabs(a);
   b = fabs(b);
