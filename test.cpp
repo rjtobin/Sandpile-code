@@ -1,6 +1,11 @@
 /*
 Sanity check for the lattice_green code.  Computes the discrete Green's function
 by lattice_green and two other methods, and checks that they agree.
+
+Requires the armadillo library.
+
+To compile:
+g++ test.cpp green.cpp -larmadillo
 */
 
 #include <iostream>

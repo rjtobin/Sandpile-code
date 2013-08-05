@@ -1,2 +1,19 @@
-Bits of code useful for sandpile-type problems.  At the moment, just stuff
-to compute Green's functions for the Z^2 lattice.
+Bits of code useful for sandpile-type problems.  Here is a description of
+the current code.  Those files that contain a main() include compilation
+instructions in a comment at the start of the file.
+
+png_draw.*: A small but useful little library to handle writing png files.
+To use, include png_draw.h, compile with png_draw.c, and link with the -lpng
+flag.
+
+green.*: A set of functions for computing discrete green's functions and
+heat kernels.  Can compute both of these for arbitrary graphs, and has
+specialised functions to compute those of path and lattice graphs quickly,
+using the formulas given in the paper "Discrete Green's Functions" by 
+Fan Chung and S.T. Yau.
+
+test.cpp:  A sanity check program for green.hpp.   
+
+sandpile-draw.cpp:  Computes the final configuration for Z^2 sandpiles, 
+which admit a fractal pattern, and draws them as png files.
+ 
