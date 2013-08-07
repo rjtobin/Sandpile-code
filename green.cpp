@@ -63,7 +63,7 @@ void green_function_alpha(mat& G, mat A, double alpha)
         G(i,j) += (1. /  (eigval[k] + alpha)) * eigvec(i,k) * eigvec(j,k);
 }
 
-int cheby_coeff[500][500];
+double cheby_coeff[500][500];
 
 void init_cheby()
 {
@@ -140,6 +140,66 @@ void lattice_green(mat& G, int m, int n)
           G(i,j) = lattice_green_val(m,n,x1+1,x2+1,y1+1,y2+1);
           G(j,i) = G(i,j); 
         }
+}
+
+void lattice_green_opt(mat& G, int m, int n)
+{
+  G.set_size(m*n,m*n);
+ 
+  double** u_x = new double*[m];
+  double** u_y = new double*[m];
+
+  double x = M_PI / (double) (n+1);
+  
+  for(int i=0; i<m; i++)
+  {
+    u_x[i] = new double[n];
+    u_y[i] = new double[n];
+    for(int j=0; j<n; j++)
+    {
+      u_x[i][j] = chebyshev_2(i-1+1,  2-cos(x * (double) (j+1)));
+      u_y[i][j] = chebyshev_2(m-(i+1),2-cos(x * (double) (j+1)));
+    }
+  }
+
+  double* u_m = new double[n];
+  for(int i=0; i<n; i++)
+    u_m[i] = chebyshev_2(m,2-cos(x * ((double) (i+1))));
+ 
+  for(int x1=0; x1<m; x1++)
+    for(int x2=0; x2<n; x2++)
+      for(int y1=0; y1<m; y1++)
+        for(int y2=0; y2<n; y2++)
+        {
+          int i = x2 + x1*n;
+          int j = y2 + y1*n;
+          if(i > j)
+            continue;
+
+          G(i,j) = 0;
+          for(int k=1; k<=n; k++)
+          {
+            double tmp = 0.;
+            tmp = 8. * sin(x * ((double) (x2+1)*k));
+            tmp *= sin(x * ((double) k * (m-y2)));
+            tmp *= u_x[x1][k-1];
+            tmp *= u_y[y1][k-1];
+            tmp /= u_m[k-1] * (double) (n+1);
+            if(!(k%2))
+              tmp *= -1.;
+            G(i,j) += tmp;
+          }
+          //G(i,j) = lattice_green_val(m,n,x1+1,x2+1,y1+1,y2+1);
+          G(j,i) = G(i,j); 
+        }
+  delete[] u_m;
+  for(int i=0; i<m; i++)
+  {
+    delete[] u_x[i];
+    delete[] u_y[i];
+  }
+  delete[] u_x;
+  delete[] u_y;
 }
 
 void laplace_path(mat& M, int n)

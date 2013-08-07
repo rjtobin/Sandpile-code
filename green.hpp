@@ -42,6 +42,8 @@ as a matrix.
 */
 void lattice_green(arma::mat& G,int m,int n);
 
+void lattice_green_opt(arma::mat& G,int m,int n);
+
 /*
 Computes the normalized Laplacian for the path P_n.
 */

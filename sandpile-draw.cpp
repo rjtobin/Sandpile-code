@@ -91,7 +91,7 @@ void graph(int N)
   color[0][0] =   0; color[0][1] = 159; color[0][2] = 107;
   color[1][0] =   0; color[1][1] = 135; color[1][2] = 189;
   color[2][0] = 255; color[2][1] = 211; color[2][2] =   0;
-  color[3][0] = 196; color[3][1] =   2; color[3][2] =   51;
+  color[3][0] = 196; color[3][1] =   2; color[3][2] =  51;
 
   
   int cid;
