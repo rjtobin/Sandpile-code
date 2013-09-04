@@ -2,6 +2,9 @@ Bits of code useful for sandpile-type problems.  Here is a description of
 the current code.  Those files that contain a main() include compilation
 instructions in a comment at the start of the file.
 
+sandpile.*: Functions to compute the sandpile process on Z^2 and regular 
+trees.
+
 png_draw.*: A small but useful little library to handle writing png files.
 To use, include png_draw.h, compile with png_draw.c, and link with the -lpng
 flag.

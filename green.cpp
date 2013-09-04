@@ -1,5 +1,7 @@
 #include "green.hpp"
 
+#define EPSILON 0.0000001
+
 using namespace arma;
 using namespace std;
 
@@ -41,6 +43,27 @@ void green_function(mat& G, mat A)
     for(int j=0; j<N; j++)
       for(int k=0; k<N; k++)
         G(i,j) += (1. /  eigval[k]) * eigvec(i,k) * eigvec(j,k);
+}
+
+void green_function_nb(mat& G, mat A)
+{
+  if(A.n_rows != A.n_cols)
+    return;
+  int N = A.n_rows;
+
+  vec eigval;
+  mat eigvec;
+  
+  eig_sym(eigval, eigvec, A);
+    
+  G.set_size(N,N);
+  G.fill(0);
+  
+  for(int i=0; i<N; i++)
+    for(int j=0; j<N; j++)
+      for(int k=0; k<N; k++)
+        if(fabs(eigval[k]) > EPSILON)
+          G(i,j) += (1. /  eigval[k]) * eigvec(i,k) * eigvec(j,k);
 }
 
 void green_function_alpha(mat& G, mat A, double alpha)
@@ -226,8 +249,8 @@ void laplace_path_2d(mat& M, int m, int n)
       for(int y1=1; y1<=m; y1++)
         for(int y2=1; y2<=n; y2++)
         {
-          int i = (x2-1) + (x1-1)*n;
-          int j = (y2-1) + (y1-1)*n;
+          int j = (x2-1) + (x1-1)*n;
+          int i = (y2-1) + (y1-1)*n;
           if(i > j)
             continue;
            
@@ -244,5 +267,33 @@ void laplace_path_2d(mat& M, int m, int n)
             M(i,j) = 0.;
           M(j,i) = M(i,j); 
         }
+}
+
+void laplace_path_2d_nb(mat& M, int m, int n)
+{
+  M.set_size(m*n,m*n);
+
+  for(int x1=1; x1<=m; x1++)
+    for(int x2=1; x2<=n; x2++)
+    {
+      for(int y1=1; y1<=m; y1++)
+        for(int y2=1; y2<=n; y2++)
+        {
+          int j = (x2-1) + (x1-1)*n;
+          int i = (y2-1) + (y1-1)*n;
+          if(i > j)
+            continue;
+           
+          if(x1==y1 && x2==y2)
+	  {
+            M(i,j) = 1;
+	  }
+          else if(x1==y1 && (((3*n + x2-y2)%n) == 1 || (3*n+x2-y2)%n == n-1))
+            M(i,j) = - 1. / 4.;
+          else if(x2==y2 && (((3*m + x1-y1)%m) == 1 || (3*m+x1-y1)%m == m-1))
+            M(i,j) = - 1. / 4.;
+          M(j,i) = M(i,j); 
+        }
+    }
 }
 

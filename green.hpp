@@ -19,6 +19,12 @@ this code assumes that A is non-singular.
 void green_function(arma::mat& G, arma::mat A);
 
 /*
+Computes the discrete Green's function G _without boundary_ for A.  
+This function allows singular matrices. 
+*/
+void green_function_nb(arma::mat& G, arma::mat A);
+
+/*
 Computes the variant of the Green's function, G_alpha, for A,
 as defined in "Discrete Green's Functions", Chung&Yau.
 */
@@ -42,6 +48,11 @@ as a matrix.
 */
 void lattice_green(arma::mat& G,int m,int n);
 
+/*
+Compute the discrete green's funciton of the lattice P_m x P_n
+as a matrix, as above, but precomputes the values of Chebyshev
+polynomials, sacrificing accuracy for speed.
+*/
 void lattice_green_opt(arma::mat& G,int m,int n);
 
 /*
@@ -50,9 +61,16 @@ Computes the normalized Laplacian for the path P_n.
 void laplace_path(arma::mat& M,int n);
 
 /*
-Computes the normalized Laplacian for the lattice P_m x P_n.
+Computes the normalized Laplacian for the lattice P_m x P_n 
+with boundary.
 */
 void laplace_path_2d(arma::mat& M,int m,int n);
+
+/*
+Computes the normalized Laplacian for the lattice P_m x P_n 
+without boundary.
+ */
+void laplace_path_2d_nb(arma::mat& M, int m, int n);
 
 
 #endif
