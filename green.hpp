@@ -73,4 +73,10 @@ without boundary.
 void laplace_path_2d_nb(arma::mat& M, int m, int n);
 
 
+/*
+Computes the normalized Laplacian for the torus C_m x C_n
+without sinks or boundary.
+*/
+void laplace_torus(arma::mat& M, int m, int n);
+
 #endif

@@ -5,7 +5,7 @@
 using namespace std;
 using namespace arma;
 
-void sandpile_lattice(mat& Ci, mat& Ce, mat& F, int N, int dim_m, int dim_n)
+void sandpile_lattice(mat& Ci, mat& Ce, mat& F, int dim_m, int dim_n)
 {
   unsigned int** grid   = new unsigned int*[2000];
   unsigned int** firing = new unsigned int*[2000]; 
@@ -37,12 +37,6 @@ void sandpile_lattice(mat& Ci, mat& Ce, mat& F, int N, int dim_m, int dim_n)
 	topple.push_back(top_y+y);
       }
     }
-      
-  
-  //int or_x = 1000, or_y = 1000;
-  //grid[or_x][or_y] = N;
-  //topple.push_back(or_x);
-  //topple.push_back(or_y);
   
   while(topple.size() > 0)
   {
@@ -62,6 +56,11 @@ void sandpile_lattice(mat& Ci, mat& Ce, mat& F, int N, int dim_m, int dim_n)
           if((i!=0 && j !=0) ||  (i==0 && j==0))
             continue;
           
+          if(t_x+i < top_x || t_y+j < top_y || t_x + i >= dim_m+top_x || t_y + j >= dim_n+top_y)
+          {
+            //cout << "skipping: " << t_x + i << ' ' << t_y + j << endl;
+            continue;
+          }
           grid[t_x + i][t_y + j]+=t_amount;
           if(grid[t_x + i][t_y + j] >= 4)
           {

@@ -297,3 +297,28 @@ void laplace_path_2d_nb(mat& M, int m, int n)
     }
 }
 
+void laplace_torus(mat& M, int m, int n)
+{
+  M.set_size(m*n, m*n);
+  M.fill(0);
+  
+  for(int x1=0; x1<m; x1++)
+  {
+    for(int y1=0; y1<n; y1++)
+    {
+      for(int x2=0; x2<m; x2++)
+      {
+        for(int y2=0; y2<n; y2++)
+        {
+          if(x1!=x2 && y1!=y2)
+            continue;
+          else if(abs(y1-y2)+abs(x1-x2) == 1 || abs(y1-y2)+abs(x1-x2) == n-1)
+            M(y1+x1*n, y2+x2*n) = - 1./4.;
+          else if(x1==x2 && y1==y2)
+            M(y1+x1*n, y2+x2*n) = 1.;
+        }
+      }
+    }
+  }
+}
+
